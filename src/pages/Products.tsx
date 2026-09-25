@@ -3,11 +3,21 @@ import ProductCard from '../components/ProductCard'
 import { products } from '../data/products'
 
 function Products() {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All')
 
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+   const categories = ['All', 'Electronics', 'Accessories', 'Footwear']
+
+  const filteredProducts = products.filter((product) => {
+  const matchesSearch = product.title
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase())
+
+  const matchesCategory =
+    selectedCategory === 'All' ||
+    product.category === selectedCategory
+  return matchesSearch && matchesCategory
+})
 
   return (
     <section className="products-page">
@@ -30,12 +40,27 @@ function Products() {
             onChange={(event) => setSearchTerm(event.target.value)}
           />
 
+           <div className="category-filters">
+    {categories.map((category) => (
+      <button
+        key={category}
+        type="button"
+        onClick={() => setSelectedCategory(category)}
+      >
+        {category}
+      </button>
+    ))}
+  </div>
+
+
           <p className="products-count">
             {filteredProducts.length} products
           </p>
         </div>
       </div>
 
+
+{filteredProducts.length > 0 ? (
       <div className="product-grid">
         {filteredProducts.map((product) => (
           <ProductCard
@@ -44,6 +69,13 @@ function Products() {
           />
         ))}
       </div>
+  ) : (<div className="products-empty">
+    <h2>No products found</h2>
+
+    <p>
+      We couldn't find any products matching "{searchTerm}".
+    </p>
+  </div>)}
     </section>
   )
 }

@@ -1,4 +1,5 @@
-import type {Product} from "../types/Product";
+import {Link} from 'react-router-dom';
+import type {Product} from "../types/product";
 
 interface ProductCardProps{
     product: Product;
@@ -6,6 +7,7 @@ interface ProductCardProps{
 
 function ProductCard({product}: ProductCardProps){
     return (
+        <Link to={`/products/${product.id}`} className="product-card-link">
         <article>
             <img src={product.image} alt={product.title} />
             <div>
@@ -14,6 +16,7 @@ function ProductCard({product}: ProductCardProps){
                 <p>₹{product.price}</p>
             </div>
         </article>
+        </Link>
     )
 }
 
